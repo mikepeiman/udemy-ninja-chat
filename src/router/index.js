@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Contact from '@/components/Contact'
 import About from '@/components/About'
+import Chat from '@/components/Chat'
 
 Vue.use(Router)
 
@@ -22,6 +23,12 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/chat',
+      name: 'Chat',
+      component: Chat,
+      props: true
     }
   ]
 })

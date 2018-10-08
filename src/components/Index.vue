@@ -20,13 +20,12 @@
   <div class="card">
     <div class="card-content center-align">
       <form class="welcome-form" @submit.prevent="enterChat">
-        <h4 class="teal-text welcome-name">Welcome,
-        <input class="teal-text welcome-name" type="text" name="name" v-model="name">
-        , to your home page</h4>
-
-        <!-- <label for="name">Enter your name</label> -->
-
-        <button class="btn teal">Enter Chat</button>
+        <h4 class="teal-text welcome-name flow-text">Welcome to your home page</h4>
+        <input class="teal-text welcome-name center-align" type="text" name="name" v-model="name"
+        v-on:focus="checkName" v-on:keyup="clearFeedback">
+        <label for="name">Enter your name</label>
+        <p id="feedback" v-if="feedback" class="red-text">{{ feedback }}</p>
+        <button class="btn teal center-align">Enter Chat</button>
       </form>
     </div>
   </div>
@@ -40,12 +39,34 @@ export default {
   data() {
     return {
       msg: "You are an app developer, Michael Peiman",
-      name: null
+      name: null,
+      feedback: null
     };
   },
   methods: {
+    checkName() {
+      console.log('input focus checkName')
+      if(this.name) {
+        clearFeedback()
+      } else {
+        console.log('no chars entered yet...')
+      }
+    },
+    clearFeedback() {
+      this.feedback = null
+      document.getElementById('feedback').innerText = null
+    },
     enterChat() {
-      console.log(this.name);
+      if (this.name) {
+        this.$router.push({ name: 'Chat', params: { name: this.name } })
+      } else {
+        console.log('no characters entered')
+        this.feedback = 'You must enter a name to join the chat'
+        // setTimeout(function clearFeedback() {
+        //   this.feedback = null
+        //   document.getElementById('feedback').innerText = null
+        // },  1000)  
+      }
     }
   }
 };
@@ -70,13 +91,25 @@ export default {
   flex-direction: row;
   justify-content: space-around;
 }
+
 .welcome-form {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
-.welcome-name {
+
+label {
+  width: 100%;
+}
+
+#feedback {
+  margin: 1em 0;
+  display: block;
+}
+
+/* .welcome-name {
   display: inline-flex;
-}
+} */
 
 h1,
 h2 {
