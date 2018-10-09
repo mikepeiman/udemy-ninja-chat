@@ -5,10 +5,10 @@
     <div class="card-content">
       <!-- ul.messages>li*3>span.teal-text{Name}+span.grey-text.text-darken-3{Message}+span.grey-text.time{Timestamp} -->
       <ul class="messages">
-        <li>
-          <span class="teal-text">Name</span>
-          <span class="grey-text text-darken-3">Message</span>
-          <span class="grey-text time">Timestamp</span>
+        <li v-for="message in messages" :key="message.id">
+          <span class="teal-text">{{ message.name }}</span>
+          <span class="grey-text text-darken-3">{{ message.content }}</span>
+          <span class="grey-text time">{{ message.timestamp }}</span>
         </li>
       </ul>
 
@@ -22,6 +22,7 @@
 
 <script>
 import NewMessage from '@/components/NewMessage'
+import db from '@/firebase/init'
 
 export default {
   name: 'Chat',
@@ -31,8 +32,26 @@ export default {
   },
   data() {
     return {
-
+      messages: []
     }
+  },
+  created() {
+    let ref = db.collection('messages').orderBy('timestamp')
+    console.log('db ref: ', ref)
+    ref.onSnapshot(snapshot => {
+      console.log(snapshot.docChanges()) // for Firebase v5+
+      snapshot.docChanges().forEach(change => {
+        if(change.type == 'added') {
+          let doc = change.doc
+          this.messages.push({
+            id: doc.id,
+            name: doc.data().name,
+            content: doc.data().content,
+            timestamp: doc.data().timestamp
+          })
+        }
+      })
+    })
   }
 }
 </script>
@@ -44,11 +63,13 @@ export default {
 
 .chat span {
   font-size: 1.4em;
-
 }
 
 .chat .time {
   display: flex;
+}
+.messages {
+  text-align: left;
 }
 
 .message>li {
