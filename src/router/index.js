@@ -28,7 +28,20 @@ export default new Router({
       path: '/chat',
       name: 'Chat',
       component: Chat,
-      props: true
+      props: true,
+      beforeEnter: (to, from, next) => {
+      // to is information about the component we're going to
+      // from is that component we've come from
+      // next is a function determining where we go next.
+      
+      // First, check params from the "to" component
+      console.log(to.params.name)
+      if(to.params.name) {
+        next()
+      } else {
+        next({ name: 'Index' })
+      }
+      }
     }
   ]
 })

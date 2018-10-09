@@ -21,9 +21,10 @@
     <div class="card-content center-align">
       <form class="welcome-form" @submit.prevent="enterChat">
         <h4 class="teal-text welcome-name flow-text">Welcome to your home page</h4>
+        <label for="name">Enter your name</label>
         <input class="teal-text welcome-name center-align" type="text" name="name" v-model="name"
         v-on:focus="checkName" v-on:keyup="clearFeedback">
-        <label for="name">Enter your name</label>
+        
         <p id="feedback" v-if="feedback" class="red-text">{{ feedback }}</p>
         <button class="btn teal center-align">Enter Chat</button>
       </form>
@@ -44,6 +45,8 @@ export default {
     };
   },
   methods: {
+    // created a method to check if any characters are entered in the input;
+    // if there are, then remove the warning message from enterChat() else statement 'You must enter a name to join the chat'
     checkName() {
       console.log('input focus checkName')
       if(this.name) {
@@ -105,6 +108,7 @@ label {
 #feedback {
   margin: 1em 0;
   display: block;
+  width: 100%;
 }
 
 /* .welcome-name {
