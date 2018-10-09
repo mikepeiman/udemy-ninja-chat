@@ -4,11 +4,11 @@
   <div class="card">
     <div class="card-content">
       <!-- ul.messages>li*3>span.teal-text{Name}+span.grey-text.text-darken-3{Message}+span.grey-text.time{Timestamp} -->
-      <ul class="messages">
+      <ul class="messages" v-chat-scroll>
         <li v-for="message in messages" :key="message.id">
-          <span class="teal-text">{{ message.name }}</span>
-          <span class="grey-text text-darken-3">{{ message.content }}</span>
-          <span class="grey-text time">{{ message.timestamp }}</span>
+          <span id="message-name">{{ message.name }}:</span>
+          <span id="message-body" class="grey-text text-darken-3">{{ message.content }}</span>
+          <span id="message-time" class="grey-text time">{{ message.timestamp }}</span>
         </li>
       </ul>
 
@@ -23,6 +23,7 @@
 <script>
 import NewMessage from '@/components/NewMessage'
 import db from '@/firebase/init'
+import moment from 'moment'
 
 export default {
   name: 'Chat',
@@ -47,7 +48,7 @@ export default {
             id: doc.id,
             name: doc.data().name,
             content: doc.data().content,
-            timestamp: doc.data().timestamp
+            timestamp: moment(doc.data().timestamp).format('MMMM Do YYYY, h:mm:ss a')
           })
         }
       })
@@ -57,6 +58,9 @@ export default {
 </script>
 
 <style>
+.chat {
+    max-width: 50vw;
+}
 .chat h2 {
   font-size: 2.6em;
 }
@@ -65,11 +69,30 @@ export default {
   font-size: 1.4em;
 }
 
-.chat .time {
+#message-name {
+  background: #aaccff;
+  color: white;
+  padding: 0.15em;
+  border-radius: 0.15em;
+}
+#message-time {
   display: flex;
+  font-size: 0.8em;
 }
 .messages {
   text-align: left;
+  max-height: 60vh;
+  overflow: auto;
+}
+.messages::-webkit-scrollbar {
+  width: 8px;
+  background: #eee;
+}
+.messages::-webkit-scrollcar-track {
+  background: #aaa;
+}
+.messages::-webkit-scrollbar-thumb {
+  background: #aaccff;
 }
 
 .message>li {

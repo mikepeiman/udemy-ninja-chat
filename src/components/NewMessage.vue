@@ -1,11 +1,11 @@
 <template>
-  <div class="new-message">
-    <form @submit.prevent="addMessage">
-      <label for="new-message">New Message (hit enter to add)</label>
-      <input type="text" name="new-message" v-model="newMessage">
-      <p class="feedback red-text" v-if="feedback">{{ feedback }}</p>
-    </form>
-  </div>
+<div class="new-message">
+  <form @submit.prevent="addMessage">
+    <label for="new-message">New Message (hit enter to add)</label>
+    <input type="text" name="new-message" v-model="newMessage" autofocus>
+    <p class="feedback red-text" v-if="feedback">{{ feedback }}</p>
+  </form>
+</div>
 </template>
 
 <script>
@@ -23,7 +23,7 @@ export default {
   methods: {
     addMessage() {
       console.log(this.newMessage, this.name, Date.now())
-      if(this.newMessage) {
+      if (this.newMessage) {
         db.collection('messages').add({
           content: this.newMessage,
           name: this.name,
@@ -35,9 +35,7 @@ export default {
       } else {
         this.feedback = "You must enter a message in order to send"
       }
-      
     }
   }
 }
-
 </script>
